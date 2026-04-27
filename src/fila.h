@@ -3,7 +3,13 @@ typedef struct NoFila {
     struct NoFila *prox;
 } NoFila;
 
-void adicionarFila(NoFila **inicio, NoFila **fim, char *nome);
-int removerFila(NoFila **inicio, NoFila **fim, char *nomeRemovido);
-void mostrarFila(const char *mensagem, NoFila *inicio);
-int filaVazia(NoFila *inicio);
+typedef struct {
+    NoFila *inicio;
+    NoFila *fim;
+    int tam;
+} Fila;
+
+void adicionarFila(Fila *fila, char *nome);
+int removerFila(Fila *fila, char *nomeRemovido);
+void mostrarFila(const char *mensagem, Fila *fila);
+int filaVazia(Fila *fila);

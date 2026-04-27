@@ -3,14 +3,14 @@
 
 #include "fila.h"
 
-void adicionarFila(NoFila **inicio, NoFila **fim, char *nome) {
+void adicionarFila(Fila *fila, char *nome) {
 }
 
-int removerFila(NoFila **inicio, NoFila **fim, char *nomeRemovido) {
+int removerFila(Fila *fila, char *nomeRemovido) {
 }
 
-void mostrarFila(const char *mensagem, NoFila *inicio) {
+void mostrarFila(const char *mensagem, Fila *fila) {
 }
 
-int filaVazia(NoFila *inicio) {
+int filaVazia(Fila *fila) {
 }

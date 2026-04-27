@@ -17,8 +17,7 @@ int main() {
         return 1;
     }
     NoPilha *topoHistorico;
-    NoFila *inicioFila;
-    NoFila *fimFila;
+    Fila filaEspera;
     while (1) {
         exibirMenu();
         int flag = 0;
