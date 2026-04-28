@@ -31,7 +31,7 @@ void mostrarHistorico(const char *mensagem, NoPilha *topo) {
     }
     printf("%s\n", mensagem);
     while (topo) {
-        printf("[Livro #%00d: %s (Restantes: %d)]\n", topo->livro.id, topo->livro.titulo, topo->livro.qtd);
+        printf("[Livro #%02d: %s (Restantes: %d)]\n", topo->livro.id, topo->livro.titulo, topo->livro.qtd);
         topo = topo->prox;
     }
 }

@@ -1,3 +1,6 @@
+#ifndef UTILS_H
+#define UTILS_H
+
 void exibirMenu();
 void limparBuffer();
 int validarEntradaInteira(const char *mensagem);
@@ -6,3 +9,5 @@ void converterMinusculo(char *texto);
 int comparaString(const char *A, const char *B);
 void copiaString(char *destino, char const *fonte);
 int segmentoString(const char *A, const char *B);
+
+#endif

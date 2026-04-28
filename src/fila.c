@@ -46,7 +46,7 @@ void mostrarFila(const char *mensagem, Fila *fila) {
     NoFila *atual = fila->inicio;
     printf("%s\n", mensagem);
     while (atual) {
-        printf("Posicao #%00d: %s\n", atual->nome);
+        printf("Posicao #%02d: %s\n", i, atual->nome);
         atual = atual->prox;
         i++;
     }

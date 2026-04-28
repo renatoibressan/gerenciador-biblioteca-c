@@ -37,8 +37,9 @@ void trocarLivros(Livro *livro1, Livro *livro2) {
     *livro2 = temp;
 }
 
-void ordenarLivros(Livro **livros, int inicio, int fim) {
-    if (inicio >= fim) return;
+int particaoVetor(Livro **livros, int inicio, int fim) {
+    int posPivo = inicio + rand() % (fim - inicio + 1);
+    trocarLivros(&(*livros)[posPivo], &(*livros)[fim]);
     Livro pivo = (*livros)[fim];
     int i = inicio - 1;
     for (int j = inicio; j < fim; j++) {
@@ -48,9 +49,16 @@ void ordenarLivros(Livro **livros, int inicio, int fim) {
         }
     }
     trocarLivros(&(*livros)[i + 1], &(*livros)[fim]);
-    int posPivo = i + 1;
-    ordenarLivros(livros, inicio, posPivo - 1);
-    ordenarLivros(livros, posPivo + 1, fim);
+    return i + 1;
+}
+
+void ordenarLivros(Livro **livros, int inicio, int fim) {
+    if (inicio < fim) {
+        int p = particaoVetor(livros, inicio, fim);
+        ordenarLivros(livros, inicio, p - 1);
+        ordenarLivros(livros, p + 1, fim);
+    }
+    return;
 }
 
 void listarLivros(const char *mensagem, Livro **livros, int qtd) {
@@ -61,7 +69,7 @@ void listarLivros(const char *mensagem, Livro **livros, int qtd) {
     ordenarLivros(livros, 0, qtd - 1);
     printf("%s\n", mensagem);
     for (int i = 0; i < qtd; i++) {
-        printf("Livro #%00d: %s (Restantes: %d)\n", (*livros)[i].id, (*livros)[i].titulo, (*livros)[i].qtd);
+        printf("Livro #%02d: %s (Restantes: %d)\n", (*livros)[i].id, (*livros)[i].titulo, (*livros)[i].qtd);
     }
 }
 

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "livros.h"
 #include "fila.h"
@@ -18,6 +19,7 @@ int main() {
     int ultimoId = 0;
     Fila filaEspera;
     NoPilha *topoHistorico = NULL;
+    srand(time(NULL));
     while (1) {
         exibirMenu();
         int flag = 0;
@@ -42,7 +44,7 @@ int main() {
                     (checkup) ? printf("A lista de livros esta vazia!\n\n") : printf("O livro '%s' nao foi encontrado!\n", tituloBusca);
                 } else {
                     Livro livroBusca = livros[idxLivro];
-                    printf("Livro #%00d: %s (Restantes: %d)\n", livroBusca.id, livroBusca.titulo, livroBusca.qtd);
+                    printf("Livro #%02d: %s (Restantes: %d)\n", livroBusca.id, livroBusca.titulo, livroBusca.qtd);
                 }
                 break;
             case 4:
