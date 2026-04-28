@@ -4,11 +4,11 @@ typedef struct {
     int qtd;
 } Livro;
 
-void criarNovoId(int *ultimoId);
+int criarNovoId(int *ultimoId);
 void cadastrarLivro(Livro **livros, int *qtd, int *capacidade, int *ultimoId);
-void listarLivros(Livro **livros, int qtd);
-int buscarLivro(Livro **livros, int qtd, int id);
-void ordenarLivrosTitulo(Livro **livros, int qtd);
-void ordenarLivrosQuantidade(Livro **livros, int qtd);
+void trocarLivros(Livro *livro1, Livro *livro2);
+void ordenarLivros(Livro **livros, int inicio, int fim);
+void listarLivros(const char *mensagem, Livro **livros, int qtd);
+int buscarLivro(Livro **livros, int qtd, const char *titulo, int *checkup);
 int emprestarLivro(Livro **livros, int qtd, int id);
 int devolverLivro(Livro **livros, int qtd, int id);

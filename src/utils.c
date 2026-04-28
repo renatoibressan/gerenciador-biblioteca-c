@@ -8,11 +8,10 @@ void exibirMenu() {
     printf("1 - Cadastrar livro\n");
     printf("2 - Listar livros\n");
     printf("3 - Buscar livro\n");
-    printf("4 - Ordenar livros\n");
-    printf("5 - Emprestar livro\n");
-    printf("6 - Devolver livro\n");
-    printf("7 - Ver fila\n");
-    printf("8 - Ver historico\n");
+    printf("4 - Emprestar livro\n");
+    printf("5 - Devolver livro\n");
+    printf("6 - Ver fila\n");
+    printf("7 - Ver historico\n");
     printf("0 - Sair\n\n");
 }
 
@@ -27,14 +26,14 @@ int validarEntradaInteira(const char *mensagem) {
         printf("Entrada inválida!\n%s", mensagem);
         limparBuffer();
     }
+    limparBuffer();
     return valor;
 }
 
-char* entradaString(const char *mensagem) {
+void entradaString(const char *mensagem, char *destino, int tamanho) {
     printf("%s", mensagem);
-    static char nome[151];
-    fgets(nome, 151, stdin);
-    return nome;
+    fgets(destino, tamanho, stdin);
+    destino[segmentoString(destino, "\n")] = '\0';
 }
 
 void converterMinusculo(char *texto) {
@@ -43,7 +42,7 @@ void converterMinusculo(char *texto) {
     }
 }
 
-int comparaString(char *A, char *B) {
+int comparaString(const char *A, const char *B) {
     int i = 0;
     while (A[i] == B[i] && A[i] != '\0' && B[i] != '\0') i++;
     return A[i] - B[i];
@@ -56,4 +55,13 @@ void copiaString(char *destino, char const *fonte) {
         i++;
     }
     destino[i] = '\0';
+}
+
+int segmentoString(const char *A, const char *B) {
+    for (int i = 0; A[i] != '\0'; i++) {
+        for (int j = 0; B[j] != '\0'; j++) {
+            if (B[j] == A[i]) return i;
+        }
+    }
+    return -1;
 }

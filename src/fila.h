@@ -9,7 +9,9 @@ typedef struct {
     int tam;
 } Fila;
 
+void inicializarFila(Fila *fila);
 void adicionarFila(Fila *fila, char *nome);
-int removerFila(Fila *fila, char *nomeRemovido);
+void removerFila(Fila *fila, char *nome);
 void mostrarFila(const char *mensagem, Fila *fila);
-int filaVazia(Fila *fila);
+int filaVazia(NoFila *inicio);
+void liberarFila(Fila *fila);

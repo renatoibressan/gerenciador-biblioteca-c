@@ -1,7 +1,8 @@
 void exibirMenu();
 void limparBuffer();
 int validarEntradaInteira(const char *mensagem);
-char* entradaString(const char *mensagem);
+void entradaString(const char *mensagem, char *destino, int tamanho);
 void converterMinusculo(char *texto);
-int comparaString(char *A, char *B);
+int comparaString(const char *A, const char *B);
 void copiaString(char *destino, char const *fonte);
+int segmentoString(const char *A, const char *B);
