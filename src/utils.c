@@ -30,7 +30,8 @@ void exibirMenu() {
 }
 
 void limparBuffer() {
-    while (getchar() != '\n');
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 }
 
 int validarEntradaInteira(const char *mensagem) {
@@ -47,7 +48,8 @@ int validarEntradaInteira(const char *mensagem) {
 void entradaString(const char *mensagem, char *destino, int tamanho) {
     printf("%s", mensagem);
     fgets(destino, tamanho, stdin);
-    destino[segmentoString(destino, "\n")] = '\0';
+    int posString = segmentoString(destino, "\n");
+    (posString != -1) ? destino[posString] = '\0' : printf("Erro ao ler texto!\n");
 }
 
 void converterMaiusculo(char *texto) {

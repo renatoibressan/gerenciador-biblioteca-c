@@ -16,7 +16,8 @@ int main() {
         return 1;
     }
     int qtdLivros = 0, ultimoId = 0, option = -1;
-    int temFila = 0, teveEmpilhacao = 0, teveEmprestimo = 0;
+    int ordenado = 0, temFila = 0;
+    int teveEmpilhacao = 0, teveEmprestimo = 0;
     Fila filaEspera;
     inicializarFila(&filaEspera);
     NoPilha *topoHistorico = NULL;
@@ -31,7 +32,7 @@ int main() {
             case 1:
                 // Cadastro
                 cadastrarLivro(&livros, &qtdLivros, &capacidade, &ultimoId);
-                int ordenado = 0;
+                ordenado = 0;
                 break;
             case 2:
                 // Listagem
