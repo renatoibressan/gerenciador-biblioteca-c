@@ -1,17 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
 
 #include "utils.h"
 
+void limparTela() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
 void exibirMenu() {
-    printf("\n===== BIBLIOTECA =====\n");
+    printf("\n====== MENU BIBLIOTECA ======\n");
     printf("1 - Cadastrar livro\n");
     printf("2 - Listar livros\n");
     printf("3 - Buscar livro\n");
-    printf("4 - Emprestar livro\n");
-    printf("5 - Devolver livro\n");
-    printf("6 - Ver fila\n");
-    printf("7 - Ver historico\n");
+    printf("4 - Adicionar ao estoque\n");
+    printf("5 - Emprestar livro\n");
+    printf("6 - Devolver livro\n");
+    printf("7 - Ver fila\n");
+    printf("8 - Ver historico\n");
     printf("0 - Sair\n\n");
 }
 
@@ -34,6 +48,12 @@ void entradaString(const char *mensagem, char *destino, int tamanho) {
     printf("%s", mensagem);
     fgets(destino, tamanho, stdin);
     destino[segmentoString(destino, "\n")] = '\0';
+}
+
+void converterMaiusculo(char *texto) {
+   for (int i = 0; texto[i] != '\0'; i++) {
+        if (texto[i] >= 'a' && texto[i] <= 'z') texto[i] -= 32;
+    } 
 }
 
 void converterMinusculo(char *texto) {

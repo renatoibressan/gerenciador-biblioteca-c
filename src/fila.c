@@ -10,18 +10,20 @@ void inicializarFila(Fila *fila) {
     fila->tam = 0;
 }
 
-void adicionarFila(Fila *fila, char *nome) {
+void adicionarFila(Fila *fila, char *nome, int idLivro) {
     NoFila *novo = malloc(sizeof(NoFila));
     if (!novo) {
         printf("Erro de alocacao!\n(Operacao abortada)\n");
         return;
     }
     copiaString(novo->nome, nome);
+    novo->idLivro = idLivro;
     novo->prox = NULL;
     if (filaVazia(fila->inicio)) fila->inicio = novo;
     else fila->fim->prox = novo;
     fila->fim = novo;
     fila->tam++;
+    printf("%s adicionado(a) a fila de espera com sucesso!\n", nome);
 }
 
 void removerFila(Fila *fila, char *nome) {
@@ -35,6 +37,7 @@ void removerFila(Fila *fila, char *nome) {
     if (filaVazia(fila->inicio)) fila->fim = NULL;
     free(temp);
     fila->tam--;
+    printf("%s removido(a) da fila de espera com sucesso!\n", nome);
 }
 
 void mostrarFila(const char *mensagem, Fila *fila) {
@@ -46,7 +49,7 @@ void mostrarFila(const char *mensagem, Fila *fila) {
     NoFila *atual = fila->inicio;
     printf("%s\n", mensagem);
     while (atual) {
-        printf("Posicao #%02d: %s\n", i, atual->nome);
+        printf("Posicao #%03d: %s\n", i, atual->nome);
         atual = atual->prox;
         i++;
     }

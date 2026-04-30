@@ -22,11 +22,12 @@ void cadastrarLivro(Livro **livros, int *qtd, int *capacidade, int *ultimoId) {
     (*livros)[*qtd].id = criarNovoId(ultimoId);
     entradaString("Insira o titulo do livro: ", (*livros)[*qtd].titulo, 151);
     converterMinusculo((*livros)[*qtd].titulo);
-    (*livros)[*qtd].qtd = validarEntradaInteira("Insira a quantidade de livros: ");
+    (*livros)[*qtd].qtd = validarEntradaInteira("Insira a quantidade de exemplares: ");
     while ((*livros)[*qtd].qtd < 1) {
         printf("Quantidade invalida!\n");
         (*livros)[*qtd].qtd = validarEntradaInteira("Insira a quantidade de livros: ");
     }
+    (*livros)[*qtd].emprestimos = 0;
     printf("Livro '%s' adicionado com sucesso!\n", (*livros)[*qtd].titulo);
     (*qtd)++;
 }
@@ -66,19 +67,17 @@ void listarLivros(const char *mensagem, Livro **livros, int qtd) {
         printf("Nao ha livros a serem listados!\n");
         return;
     }
-    ordenarLivros(livros, 0, qtd - 1);
     printf("%s\n", mensagem);
     for (int i = 0; i < qtd; i++) {
-        printf("Livro #%02d: %s (Restantes: %d)\n", (*livros)[i].id, (*livros)[i].titulo, (*livros)[i].qtd);
+        printf("Livro #%04d: %s (Exemplares restantes: %d)\n", (*livros)[i].id, (*livros)[i].titulo, (*livros)[i].qtd);
     }
 }
 
-int buscarLivro(Livro **livros, int qtd, const char *titulo, int *checkup) {
+int buscarLivroPorNome(Livro **livros, int qtd, const char *titulo) {
     if (!(*livros) || qtd == 0) {
-        *checkup = 1;
+        printf("A lista de livros esta vazia!\n");
         return -1;
     }
-    ordenarLivros(livros, 0, qtd - 1);
     int esq = 0, dir = qtd - 1;
     while (esq <= dir) {
         int meio = esq + (dir - esq) / 2;
@@ -87,12 +86,6 @@ int buscarLivro(Livro **livros, int qtd, const char *titulo, int *checkup) {
         if (res < 0) esq = meio + 1;
         if (res > 0) dir = meio - 1;
     }
-    *checkup = 0;
+    printf("O livro nao foi encontrado!\n");
     return -1;
-}
-
-int emprestarLivro(Livro **livros, int qtd, int id) {
-}
-
-int devolverLivro(Livro **livros, int qtd, int id) {
 }

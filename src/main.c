@@ -15,58 +15,141 @@ int main() {
         printf("Erro de alocacao!\n(Programa abortado)\n");
         return 1;
     }
-    int qtdLivros = 0;
-    int ultimoId = 0;
+    int qtdLivros = 0, ultimoId = 0, option = -1;
+    int temFila = 0, teveEmpilhacao = 0, teveEmprestimo = 0;
     Fila filaEspera;
+    inicializarFila(&filaEspera);
     NoPilha *topoHistorico = NULL;
     srand(time(NULL));
-    while (1) {
+    limparTela();
+    printf("\n========== SISTEMA GERENCIADOR DE BIBLIOTECA ==========\n");
+    printf("Desenvolvido por: Renato Ikeda Bressan\n");
+    do {
         exibirMenu();
-        int flag = 0;
-        int option = validarEntradaInteira("Insira uma das opcoes acima: ");
-        while (option < 0 || option > 8) {
-            printf("Opcao invalida!\n");
-            option = validarEntradaInteira("Insira uma das opcoes acima: ");
-        }
+        option = validarEntradaInteira("Insira uma das opcoes acima: ");
         switch (option) {
             case 1:
+                // Cadastro
                 cadastrarLivro(&livros, &qtdLivros, &capacidade, &ultimoId);
+                int ordenado = 0;
                 break;
             case 2:
+                // Listagem
+                if (!ordenado) {
+                    ordenarLivros(&livros, 0, qtdLivros - 1);
+                    ordenado = 1;
+                }
                 listarLivros("Livros listados:", &livros, qtdLivros);
                 break;
             case 3:
-                int checkup = 0;
+                // Busca binária
+                if (!ordenado) {
+                    ordenarLivros(&livros, 0, qtdLivros - 1);
+                    ordenado = 1;
+                }
                 char tituloBusca[151];
                 entradaString("Insira o titulo do livro desejado: ", tituloBusca, 151);
-                int idxLivro = buscarLivro(&livros, qtdLivros, tituloBusca, &checkup);
-                if (idxLivro == -1) {
-                    (checkup) ? printf("A lista de livros esta vazia!\n\n") : printf("O livro '%s' nao foi encontrado!\n", tituloBusca);
-                } else {
-                    Livro livroBusca = livros[idxLivro];
-                    printf("Livro #%02d: %s (Restantes: %d)\n", livroBusca.id, livroBusca.titulo, livroBusca.qtd);
-                }
+                converterMinusculo(tituloBusca);
+                int idxLivro = buscarLivroPorNome(&livros, qtdLivros, tituloBusca);
+                if (idxLivro == -1) break;
+                Livro livroBusca = livros[idxLivro];
+                printf("Livro #%04d: %s (Exemplares restantes: %d)\n", livroBusca.id, livroBusca.titulo, livroBusca.qtd);
                 break;
             case 4:
-                // Empréstimo
+                // Acréscimo ao estoque
+                if (!ordenado) {
+                    ordenarLivros(&livros, 0, qtdLivros - 1);
+                    ordenado = 1;
+                }
+                entradaString("Insira o titulo do livro desejado: ", tituloBusca, 151);
+                converterMinusculo(tituloBusca);
+                idxLivro = buscarLivroPorNome(&livros, qtdLivros, tituloBusca);
+                if (idxLivro == -1) break;
+                int aumentoEstoque = validarEntradaInteira("Insira a quantidade de novos livros: ");
+                while (aumentoEstoque < 1) {
+                    printf("Quantidade invalida!\n");
+                    aumentoEstoque = validarEntradaInteira("Insira a quantidade de novos livros: ");
+                }
+                int qtdAnterior = livros[idxLivro].qtd;
+                livros[idxLivro].qtd += aumentoEstoque;
+                printf("%d novos exemplares adicionados ao estoque do livro '%s' com sucesso!\n", aumentoEstoque, livros[idxLivro].titulo);
+                char nomeFila[151];
+                if (qtdAnterior == 0 && temFila && livros[idxLivro].id == filaEspera.inicio->idLivro) {
+                    while (!filaVazia(filaEspera.inicio)) {
+                        if (teveEmpilhacao && livros[idxLivro].id == topoHistorico->livro.id) desempilharDevolucao(&topoHistorico);
+                        removerFila(&filaEspera, nomeFila);
+                        if (filaEspera.tam == 0) temFila = 0;
+                        livros[idxLivro].qtd--;
+                        livros[idxLivro].emprestimos++;
+                        teveEmprestimo = 1;
+                        printf("Livro '%s' emprestado a %s com sucesso!\n", livros[idxLivro].titulo, nomeFila);
+                    }
+                }
                 break;
             case 5:
-                // Devolução
+                // Empréstimo
+                if (!ordenado) {
+                    ordenarLivros(&livros, 0, qtdLivros - 1);
+                    ordenado = 1;
+                }
+                entradaString("Insira o nome da pessoa na fila: ", nomeFila, 151);
+                converterMaiusculo(nomeFila);
+                entradaString("Insira o titulo do livro desejado: ", tituloBusca, 151);
+                converterMinusculo(tituloBusca);
+                idxLivro = buscarLivroPorNome(&livros, qtdLivros, tituloBusca);
+                if (idxLivro == -1) break;
+                if (livros[idxLivro].qtd == 0) {
+                    printf("Livro '%s' nao disponivel no estoque!\n", livros[idxLivro].titulo);
+                    adicionarFila(&filaEspera, nomeFila, livros[idxLivro].id);
+                    temFila = 1;
+                    break;
+                }
+                if (teveEmpilhacao && livros[idxLivro].id == topoHistorico->livro.id) desempilharDevolucao(&topoHistorico);
+                if (temFila && livros[idxLivro].id == filaEspera.inicio->idLivro) removerFila(&filaEspera, nomeFila);
+                if (filaEspera.tam == 0) temFila = 0;
+                livros[idxLivro].qtd--;
+                livros[idxLivro].emprestimos++;
+                teveEmprestimo = 1;
+                printf("Livro '%s' emprestado a %s com sucesso!\n", livros[idxLivro].titulo, nomeFila);
                 break;
             case 6:
-                mostrarFila("Fila de espera:", &filaEspera);
+                // Devolução
+                if (!teveEmprestimo) {
+                    printf("Nao ha livros a serem devolvidos!\n");
+                    break;
+                }
+                if (!ordenado) {
+                    ordenarLivros(&livros, 0, qtdLivros - 1);
+                    ordenado = 1;
+                }
+                entradaString("Insira o titulo do livro desejado: ", tituloBusca, 151);
+                converterMinusculo(tituloBusca);
+                idxLivro = buscarLivroPorNome(&livros, qtdLivros, tituloBusca);
+                if (idxLivro == -1) break;
+                if (livros[idxLivro].emprestimos == 0) {
+                    printf("Nao ha exemplares de '%s' a serem devolvidos!\n", livros[idxLivro].titulo);
+                    break;
+                }
+                empilharDevolucao(&topoHistorico, livros[idxLivro]);
+                teveEmpilhacao = 1;
+                livros[idxLivro].qtd++;
+                livros[idxLivro].emprestimos--;
+                printf("Livro '%s' devolvido com sucesso!\n", livros[idxLivro].titulo);
                 break;
             case 7:
+                // Fila completa
+                mostrarFila("Fila de espera:", &filaEspera);
+                break;
+            case 8:
+                // Histórico total
                 mostrarHistorico("Historico completo:", topoHistorico);
                 break;
             case 0:
-                printf("Encerrando programa\n");
-                flag = 1;
+                printf("Encerrando programa\n\n");
                 break;
             default: printf("Opcao invalida!\n");
         }
-        if (flag) break;
-    }
+    } while (option != 0);
     liberarPilha(&topoHistorico);
     liberarFila(&filaEspera);
     free(livros);

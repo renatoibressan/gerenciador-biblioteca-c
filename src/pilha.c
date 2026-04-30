@@ -13,15 +13,18 @@ void empilharDevolucao(NoPilha **topo, Livro livro) {
     novo->livro = livro;
     novo->prox = *topo;
     *topo = novo;
+    printf("Livro incrementado a pilha com sucesso!\n");
 }
 
-int desempilharDevolucao(NoPilha **topo, Livro *livro) {
-    if (pilhaVazia(*topo)) return 0;
+void desempilharDevolucao(NoPilha **topo) {
+    if (pilhaVazia(*topo)) {
+        printf("Pilha vazia!\n(Operacao abortada)\n");
+        return;
+    }
     NoPilha *temp = *topo;
-    *livro = temp->livro;
     *topo = (*topo)->prox;
     free(temp);
-    return 1;
+    printf("Livro removido da pilha com sucesso!\n");
 }
 
 void mostrarHistorico(const char *mensagem, NoPilha *topo) {
@@ -31,7 +34,7 @@ void mostrarHistorico(const char *mensagem, NoPilha *topo) {
     }
     printf("%s\n", mensagem);
     while (topo) {
-        printf("[Livro #%02d: %s (Restantes: %d)]\n", topo->livro.id, topo->livro.titulo, topo->livro.qtd);
+        printf("[Livro #%04d: %s (Exemplares restantes: %d)]\n", topo->livro.id, topo->livro.titulo, topo->livro.qtd);
         topo = topo->prox;
     }
 }
