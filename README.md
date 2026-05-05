@@ -22,15 +22,15 @@ Este é um sistema de gerenciamento de biblioteca desenvolvido em linguagem C. O
 1. Clone ou baixe o repositório para o seu ambiente local.
 2. Navegue até o diretório `src/` do projeto:
    ```
-   cd gerenciador-biblioteca-c/src
+   cd gerenciador-biblioteca-c/project
    ```
 3. Compile o programa usando o GCC:
    ```
-   gcc -o main main.c livros.c fila.c pilha.c utils.c
+   gcc -I include src/*.c -o bin/main
    ```
 4. Execute o programa:
    ```
-   ./main
+   ./bin/main
    ```
 
 ## Como Usar
